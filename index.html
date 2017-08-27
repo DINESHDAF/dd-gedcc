@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="robots" content="noindex, nofollow">
+    <title>Auto Command Generator</title>
+    <link rel="icon" href="https://storage.googleapis.com/dd-gedcc.appspot.com/icon/favicon.png" type="image/png" sizes="16x16">
+    <link rel="canonical" href="https://dd-gedcc.appspot.com/">
+
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css"  href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+
+    <!--Import materialize.css-->
+    <link rel="stylesheet" type="text/css" href="css/materialize.min.css">
+    <link href="css/font-awesome-animation.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="css/default.css">
+  </head>
+
+  <body ng-app="">
+    <nav class="indigo darken-1" role="navigation">
+      <div class="nav-wrapper container">
+        <a id="logo-container" href="https://dd-gedcc.appspot.com/" class="brand-logo" title="GEDCC"><img src="https://storage.googleapis.com/dd-gedcc.appspot.com/logo/logo.png" alt="Logo"></a>
+        <a href="https://dd-gedcc.appspot.com/" id="pagelink" class="text-uppercase" title="GEDCC">gedcc</a>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="alert alert-warning warn-content">
+        <button class="btn-warning" id="close-warning"><i class="fa fa-times" aria-hidden="true"></i></button>
+        <h5><i class="faa-slow fa fa-warning faa-flash animated" aria-hidden="true"></i> Warning!</h5>
+        <p><i class="fa fa-star" aria-hidden="true"></i> This tool is developed for internal use only. Please do not circulate the link outside the project.</p>
+        <p><i class="fa fa-exclamation-circle" aria-hidden="true"></i> If generating a command for particular files, then please create a text <code>(.txt)</code> file with list of files. For demo file, <a href="https://storage.googleapis.com/dd-gedcc.appspot.com/demo-file/demo_file.txt" download>Click Here</a></p>
+        <p><i class="fa fa-info-circle" aria-hidden="true"></i> One can use following delimiters to separate two files: <code>[',', '\n', ';', " "]</code>.</p>
+        <p><i class="fa fa-check-circle" aria-hidden="true"></i> If you want to save the exported / downloaded files to particular location, then please enter a valid path while generating the command. For e.g.: <code>/Users/{LDAP}/Documents/for_cider/{export / download}/{sitename}</code></p>
+      </div>
+
+      <!-- Input Section Starts -->
+
+      <div class="input-section">
+        <h4>Input Section</h4>
+
+        <div class="input-field col s12">
+          <select id="getCommandType" onchange="myFunction();">
+            <option value="" disabled selected>Please select type to generate export / download command: </option>
+            <optgroup label="Using File List">
+              <option value="opt_0">Generate Download command using list of files.</option>
+              <option value="opt_1">Generate Export command using list of files.</option>
+            </optgroup>
+            <optgroup label="Using Site Tag Directly">
+              <option value="opt_2">Generate Download command using site tag.</option>
+              <option value="opt_3">Generate Export command using site tag.</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <form id="myForm" validate>
+          <!-- Get Branch Name start -->
+          <div class="row col s12 hide my-input" id="input0">
+            <div class="input-field col s12">
+              <input id="getBranchName" type="text" class="validate" ng-model="getBranchName">
+              <label for="getBranchName">Please enter full Goro branch name (E.g.: cybage-...-... / preview-...-...)*</label>
+            </div>
+          </div>
+          <!-- Get Branch Name end -->
+
+          <!-- Download using file list start -->
+          <div class="row hide my-input col s12" id="input1">
+            <div class="input-field col s6">
+              <div class="file-field input-field">
+                <div class="btn">
+                  <span class="text">Select file.</span>&nbsp;&nbsp;<i class="faa-slow fa fa-file-text faa-flash animated" aria-hidden="true"></i>
+                  <input type="file" accept=".txt" onchange="checkfileDown(this);" id="fileInputDownload">
+                </div>
+                <div class="file-path-wrapper">
+                  <input class="file-path validate" type="text" placeholder="Please select a valid .txt file *">
+                </div>
+              </div>
+            </div>
+
+            <div class="input-field col s6">
+              <input id="getDownloadPath" type="text" class="validate" ng-model="getDownloadPath">
+              <label for="getDownloadPath">Please enter the location to save downloaded files. (optional)</label>
+            </div>
+
+            <textarea id="fileDisplayAreaDownload" class="hide"></textarea>
+          </div>
+          <!-- Download using file list end -->
+
+          <!-- Export using file list start -->
+          <div class="row hide my-input col s12" id="input2">
+            <div class="input-field col s6">
+              <div class="file-field input-field">
+                <div class="btn">
+                  <span class="text">Select file.</span>&nbsp;&nbsp;<i class="faa-slow fa fa-file-text faa-flash animated" aria-hidden="true"></i>
+                  <input type="file" accept=".txt" onchange="checkfileExp(this);" id="fileInputExport">
+                </div>
+                <div class="file-path-wrapper">
+                  <input class="file-path validate" type="text" placeholder="Please select a valid .txt file *">
+                </div>
+              </div>
+            </div>
+
+            <div class="input-field col s6">
+              <input id="getExportPath" type="text" class="validate" ng-model="getExportPath">
+              <label for="getExportPath">Please enter the location to save exported files. (optional)</label>
+            </div>
+
+            <textarea id="fileDisplayAreaExport" class="hide"></textarea>
+          </div>
+          <!-- Export using file list end -->
+
+          <!-- Download using site tag start -->
+          <div class="row hide my-input col s12" id="input3">
+            <div class="input-field col s6">
+              <input id="getDownSiteTag" type="text" class="validate" ng-model="getDownSiteTag">
+              <label for="getDownSiteTag">Please enter site-tag of a particular site to download all files. *</label>
+            </div>
+
+            <div class="input-field col s6">
+              <input id="getDownSitePath" type="text" class="validate" ng-model="getDownSitePath">
+              <label for="getDownSitePath">Please enter the location to save downloaded files. (optional)</label>
+            </div>
+          </div>
+          <!-- Download using site tag end -->
+
+          <!-- Export using site tag start -->
+          <div class="row col s12 hide my-input col s12" id="input4">
+            <div class="input-field col s6">
+              <input id="getExpSiteTag" type="text" class="validate" ng-model="getExpSiteTag">
+              <label for="getExpSiteTag">Please enter site-tag of a particular site to export all files. *</label>
+            </div>
+
+            <div class="input-field col s6">
+              <input id="getExpSitePath" type="text" class="validate" ng-model="getExpSitePath">
+              <label for="getExpSitePath">Please enter the location to save exported files. (optional)</label>
+            </div>
+          </div>
+          <!-- Export using site tag end -->
+
+        </form>
+
+        <!-- Input Section Ends -->
+
+        <table>
+          <tbody>
+            <tr>
+              <td class="center-align">
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" id="show-reply">
+                  <i class="fa fa-sign-in faa-horizontal animated" aria-hidden="true"></i>
+                  &nbsp;&nbsp;Generate&nbsp;&nbsp;
+                  <i class="fa fa-sign-out faa-passing animated" aria-hidden="true"></i>
+                </button>
+              </td>
+              <td class="center-align">
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent reset-page">
+                  <i class="fa fa-spin fa-refresh" aria-hidden="true"></i>&nbsp;&nbsp;Reset All&nbsp;&nbsp;<i class="fa fa-spin fa-refresh" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="output-section">
+        <h4>Output Section</h4>
+
+        <!-- Output 0: Alert when nothing is selected.-->
+        <div id="reply0" class="show my-output">
+          <p class="red-text faa-slow faa-flash animated"><i class="fa fa-warning" aria-hidden="true"></i><span id="empty-fields"> Please select type to generate command.</span></p>
+        </div>
+
+        <!-- Output 1 for opt_0: Command generated to download files. -->
+        <div id="reply1" class="hide my-output">
+          <h6 class="text-align"><strong>Command generated to download files.</strong></h6>
+          <div class="getOutput"></div>
+          <div class="copyReply">
+            <button class="copy-data mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+              <i class="fa fa-files-o faa-pulse animated" aria-hidden="true"></i>
+              &nbsp;&nbsp;Copy Command&nbsp;&nbsp;
+              <i class="fa fa-files-o faa-pulse animated" aria-hidden="true"></i>
+            </button>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent reset-page">
+              <i class="fa fa-trash-o faa-ring animated faa-slow" aria-hidden="true"></i>
+              &nbsp;&nbsp;Clear Command&nbsp;&nbsp;
+              <i class="fa fa-trash-o faa-ring animated faa-slow" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Output 2 for opt_1: Command generated to export files. -->
+        <div id="reply2" class="hide my-output">
+          <h6 class="text-align"><strong>Command generated to export files.</strong></h6>
+          <div class="getOutput"></div>
+          <div class="copyReply">
+            <button class="copy-data mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+              <i class="fa fa-files-o faa-pulse animated" aria-hidden="true"></i>
+              &nbsp;&nbsp;Copy Command&nbsp;&nbsp;
+              <i class="fa fa-files-o faa-pulse animated" aria-hidden="true"></i>
+            </button>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent reset-page">
+              <i class="fa fa-trash-o faa-ring animated faa-slow" aria-hidden="true"></i>
+              &nbsp;&nbsp;Clear Command&nbsp;&nbsp;
+              <i class="fa fa-trash-o faa-ring animated faa-slow" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Output 3 for opt_2: Command generated to download whole site. -->
+        <div id="reply3" class="hide my-output">
+          <h6 class="text-align"><strong>Command generated to download whole site.</strong></h6>
+          <div class="getOutput"></div>
+          <div class="copyReply text-center">
+            <button class="copy-data mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+              <i class="fa fa-files-o faa-pulse animated" aria-hidden="true"></i>
+              &nbsp;&nbsp;Copy Command&nbsp;&nbsp;
+              <i class="fa fa-files-o faa-pulse animated" aria-hidden="true"></i>
+            </button>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent reset-page">
+              <i class="fa fa-trash-o faa-ring animated faa-slow" aria-hidden="true"></i>
+              &nbsp;&nbsp;Clear Command&nbsp;&nbsp;
+              <i class="fa fa-trash-o faa-ring animated faa-slow" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Output 4 for opt_3: Command generated to export whole site. -->
+        <div id="reply4" class="hide my-output">
+          <h6 class="text-align"><strong>Command generated to export whole site.</strong></h6>
+          <div class="getOutput"></div>
+          <div class="copyReply text-center">
+            <button class="copy-data mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+              <i class="fa fa-files-o faa-pulse animated" aria-hidden="true"></i>
+              &nbsp;&nbsp;Copy Command&nbsp;&nbsp;
+              <i class="fa fa-files-o faa-pulse animated" aria-hidden="true"></i>
+            </button>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent reset-page">
+              <i class="fa fa-trash-o faa-ring animated faa-slow" aria-hidden="true"></i>
+              &nbsp;&nbsp;Clear Command&nbsp;&nbsp;
+              <i class="fa fa-trash-o faa-ring animated faa-slow" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="page-footer">
+      <div class="footer-copyright">
+        <div class="container">
+          © 2017 Copyright DD
+          <span class="grey-text text-lighten-4 right">Web-Tool designed &amp; developed by Dinesh K. Daf.</span>
+        </div>
+      </div>
+    </footer>
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script>
+              (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] || function () {
+                  (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+                a = s.createElement(o),
+                        m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+              })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+              ga('create', 'UA-102616760-1', 'auto');
+              ga('send', 'pageview');
+
+    </script>
+  </body>
+</html>
